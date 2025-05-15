@@ -1,11 +1,9 @@
 
-import { useEffect, useState } from 'react'
 import type { User } from '../../types'
 import {
     Table,
     TableBody,
     TableCaption,
-    TableCell,
     TableHead,
     TableHeader,
     TableRow,
@@ -15,21 +13,18 @@ import TableUserData from './TableUserData'
 
 //foto , nombre, apellido / email / pais / acciones
 
-interface UserData  {
-    photo: User['picture']
-    name: string,
-    lastName: string,
-    email: string,
-    country: string,
+interface userItemProps { 
+    users: User[]
+    fieldsDraw: boolean,
+    setUsers : React.Dispatch<React.SetStateAction<User[] | undefined>>
 }
-export default function UserItem({ users }: { users: User[] }) {
-    const [userData, setUserData] = useState<User>()
-
+export default function UserItem({ users, fieldsDraw, setUsers }: userItemProps) {
+    
     return (
         <Table className=' border-2 border-gray-300 '>
             <TableCaption>Users </TableCaption>
-            <TableHeader>
-                <TableRow>
+            <TableHeader className=' bg-gray-400'>
+                <TableRow className=' text-lg'>
                     <TableHead className=" text-center">Photo</TableHead>
                     <TableHead className=" text-center">Name</TableHead>
                     <TableHead className=" text-center">Last Name</TableHead>
@@ -38,10 +33,14 @@ export default function UserItem({ users }: { users: User[] }) {
                     <TableHead className=" text-center">Actions</TableHead>
                 </TableRow>
             </TableHeader>
-            <TableBody>
-                {users.map(user => (
+            <TableBody className=' bg-slate-100'>
+                {users.map((user, i) => (
                     <TableUserData
+                        key={user.id.value}
                         user={user}
+                        fieldsDraw={fieldsDraw}
+                        i={i}
+                        setUsers={setUsers}
                     />
                 ))}
             </TableBody>
