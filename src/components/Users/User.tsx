@@ -1,4 +1,5 @@
 
+import { LogIn } from 'lucide-react'
 import type { User } from '../../types'
 import {
     Table,
@@ -16,7 +17,7 @@ import TableUserData from './TableUserData'
 interface userItemProps { 
     users: User[]
     fieldsDraw: boolean,
-    setUsers : React.Dispatch<React.SetStateAction<User[] | undefined>>
+    setUsers : React.Dispatch<React.SetStateAction<User[]>>
 }
 export default function UserItem({ users, fieldsDraw, setUsers }: userItemProps) {
     
@@ -36,7 +37,7 @@ export default function UserItem({ users, fieldsDraw, setUsers }: userItemProps)
             <TableBody className=' bg-slate-100'>
                 {users.map((user, i) => (
                     <TableUserData
-                        key={user.id.value}
+                        key={user.login.uuid}
                         user={user}
                         fieldsDraw={fieldsDraw}
                         i={i}

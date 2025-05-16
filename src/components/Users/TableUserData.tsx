@@ -6,7 +6,7 @@ interface TableUserDataProps {
     user: User
     fieldsDraw: boolean
     i: number
-    setUsers: React.Dispatch<React.SetStateAction<User[] | undefined>>
+    setUsers: React.Dispatch<React.SetStateAction<User[] >>
 }
 
 export default function TableUserData({user, fieldsDraw, i, setUsers}: TableUserDataProps) {

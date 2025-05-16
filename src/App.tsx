@@ -6,16 +6,18 @@ import { useLocation } from "react-router";
 
 function App() {
   const [ info, setInfo] = useState<Info>();
-  const [users, setUsers] = useState<User[]>();
+  const [users, setUsers] = useState<User[]>([]);
   const [fieldsDraw, setFieldsDraw] = useState(false);
   const [search, setsearch] = useState<string >('')
   const [debouncedSearch, setDebouncedSearch] = useState<string >('')
   const [sortUsers, setSortUsers] = useState(false)
   const {pathname} = useLocation()
+  //el useRef es como la mezcla de un etado y una variable, pero el valor o datos que almacena 
+  //percisten entre renderizados, y para acceder a su valor es con la propiedad "current"
   const originalUsers = useRef<User[]>([])
 
   const debounced = useDebouncedCallback(value => {
-    setDebouncedSearch(value)
+    setDebouncedSearch(value.toLowerCase().trim())
   }, 500)
 
   useEffect(() => {
@@ -33,13 +35,18 @@ function App() {
   }, []);
 
   useEffect(() => {
-    if(search === null || search === ''){
+     handleRestart()
+    if(debouncedSearch === null || debouncedSearch === ''){
       setsearch('')
       window.history.pushState({}, '', pathname)
       return
     }
-    const url = `${pathname}?country=${search}`
-      window.history.pushState({}, '', url)
+    console.log('busqueda: ', debouncedSearch)
+    const url = `${pathname}?country=${debouncedSearch}`
+    window.history.pushState({}, '', url)
+    setUsers(prev => {
+      return prev?.filter(user => user.location.country.toLocaleLowerCase().trim().includes(debouncedSearch))
+    })
   }, [debouncedSearch])
 
 
@@ -88,7 +95,6 @@ function App() {
           <input
             value={search}
             onChange={handleOnChange}
-            onMouseLeave={() => setsearch('')}
             className=" border border-black bg-gray-600 text-sm text-white py-1.5 px-1 rounded-sm"
             placeholder=" Filtar por pais"
             type="search"
